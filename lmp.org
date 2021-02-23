@@ -1,6 +1,6 @@
 #+TITLE: Literate mathematical programming
 #+AUTHOR: Parker Knight
-
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 
 
 *  Linear programming
@@ -40,10 +40,6 @@ model = Model(GLPK.Optimizer);
 @constraint(model, hs2, dot(a2, xc) + r * norm(a2) <= b2)
 @objective(model, Max, r)
 optimize!(model)
-
-return [value(xc); values(r)]
 #+end_src
-
-#+RESULTS:
 
 * Quadratic programming
