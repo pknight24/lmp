@@ -1,0 +1,47 @@
+#+TITLE: Literate mathematical programming
+#+AUTHOR: Parker Knight
+
+
+
+*  Linear programming
+** Chebyshev center of a polyhedron
+
+Suppose that we are given some polyhedron $P = \{ x \in \mathbb{R}^n : a_i^Tx \leq b_i, i = 1, ... m \} \subset \mathbb{R}^n$.
+
+We are interested in finding the largest Euclidean ball $B = \{x_c + u : ||u||_2 \leq r \}$ that lies in $P$, where $x_c$ is the center of $B$ and $r$ is its radius.
+
+This problem can be rewritten and then solved as a simple linear program. To see this, first suppose that $B$ lies in just one of the halfspaces $a^T_ix \leq b_i$. This means that $a_i^T(x_c + u) \leq b_i$ for all $u$ with $||u||_2 \leq r$. Notice that
+
+$$\sup \{a_i^Tu : ||u||_2 \leq r \} = r||a_i||_2$$
+
+where the supremum is achieved at $u = r\frac{a_i}{||a_i||_2}$. It follows that if $||u||_2 \leq r$, then $a_i^Tx_c + r||a_i||_2 \leq b_i$, which is a linear inequality in $x_c$ and $r$.
+
+Note that $B \subset P$ if and only if this condition holds for $i = 1, ... m$. This yields the following linear program:
+
+$$\begin{align*}
+\textrm{maximize    } &r \\
+\textrm{s.t.  } &a^T_ix_c + r||a_i||_2 \leq b_i \textrm{,  } i = 1, ... m
+\end{align*}$$
+
+A quick example in Julia is given below.
+
+
+#+begin_src julia
+using JuMP, GLPK, LinearAlgebra
+a1 = -1;
+b1 = 0;
+a2 = 2.2;
+b2 = 4.5;
+
+model = Model(GLPK.Optimizer);
+@variable(model, xc);
+@variable(model, 0 <= r);
+@constraint(model, hs1, dot(a1, xc) + r * norm(a1) <= b1)
+@constraint(model, hs2, dot(a2, xc) + r * norm(a2) <= b2)
+@objective(model, Max, r)
+optimize!(model)
+#+end_src
+
+#+RESULTS:
+
+* Quadratic programming
