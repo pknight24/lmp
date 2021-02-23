@@ -26,7 +26,7 @@ $$\begin{align*}
 A quick example in Julia is given below.
 
 
-#+begin_src julia
+#+begin_src julia :results output
 using JuMP, GLPK, LinearAlgebra
 a1 = -1;
 b1 = 0;
@@ -40,8 +40,31 @@ model = Model(GLPK.Optimizer);
 @constraint(model, hs2, dot(a2, xc) + r * norm(a2) <= b2)
 @objective(model, Max, r)
 optimize!(model)
+
+
+value(xc)
+value(r)
 #+end_src
 
 #+RESULTS:
+#+begin_example
+-1
+0
+2.2
+4.5
+A JuMP Model
+Feasibility problem with:
+Variables: 0
+Model mode: AUTOMATIC
+CachingOptimizer state: EMPTY_OPTIMIZER
+Solver name: GLPK
+xc
+r
+hs1 : -xc + r ≤ 0.0
+hs2 : 2.2 xc + 2.2 r ≤ 4.5
+r
+1.0227272727272727
+1.0227272727272727
+#+end_example
 
 * Quadratic programming
