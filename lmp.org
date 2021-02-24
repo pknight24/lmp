@@ -43,3 +43,4 @@ optimize!(model)
 #+end_src
 
 * Quadratic programming
+** Linear progam with a random cost
