@@ -43,4 +43,6 @@ optimize!(model)
 #+end_src
 
 * Quadratic programming
-** Linear progam with a random cost
+** Constrained least-squares
+
+We consider the standard least-squares problem $||Ax - b||_2^2$ subject to $l_y \leq x_i \leq u_i$ for $i = 1 ... n$. This is clearly a quadratic program, since least squares is quadratic.
