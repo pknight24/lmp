@@ -26,7 +26,7 @@ $$\begin{align*}
 A quick example in Julia is given below.
 
 
-#+begin_src julia :results value
+#+begin_src julia
 using JuMP, GLPK, LinearAlgebra
 a1 = -1;
 b1 = 0;
@@ -46,3 +46,23 @@ optimize!(model)
 ** Constrained least-squares
 
 We consider the standard least-squares problem $||Ax - b||_2^2$ subject to $l_y \leq x_i \leq u_i$ for $i = 1 ... n$. This is clearly a quadratic program, since least squares is quadratic.
+
+Below is an example of a linear regression analysis on the classic Iris data in which we constrain the coefficients to lie between 0 and 1.
+
+#+begin_src julia
+using JuMP, SCS
+using RDatasets
+
+iris = dataset("datasets", "iris");
+X = iris[:,1:3] |> Matrix
+Y = iris[:,4]
+
+model = Model(SCS.Optimizer)
+@variable(model, 0 <= b[1:3] <= 1)
+@objective(model, Min, (X * b - Y)' * (X * b - Y))
+optimize!(model)
+#+end_src
+
+#+RESULTS:
+
+** Linear program with random cost
