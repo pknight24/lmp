@@ -3,3 +3,6 @@
 *.log
 tmp/
 *.html
+*.tex
+*.pdf
+.auctext-auto/*

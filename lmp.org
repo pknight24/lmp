@@ -66,3 +66,23 @@ optimize!(model)
 #+RESULTS:
 
 ** Linear program with random cost
+
+Consider a standard linear problem $c^Tx$ with the usual constraints. Suppose that the cost vector $c$ is random with mean $\bar{c}$ and covariance $\Sigma$. Then, the cost $c^Tx$ is a random scalar with mean $\bar{c}^Tx$ and variance $x^T\Sigma x$ (this is simple to check).
+
+There is a trade-off between having a small expected cost and a small cost variance. To solve the original program while taking variance into account, we minimize a linear combination of the expected cost and its variance, $\bar{c}^Tx + \gamma x^T\Sigma x$, where $\gamma \geq 0$ is called the risk-aversion parameter. This clearly yields a quadratic program in $x$. An example is given below.
+
+#+begin_src julia
+using JuMP, SCS
+
+n = 10;
+A = rand(n,n)
+sigma = A * A'
+cbar = randn(n)
+gamma = 0.8
+
+model = Model(SCS.Optimizer)
+@variable(model, 0 <= x[1:n] <= 1)
+@constraint(model, con, sum(x) == 1)
+@objective(model, Min, cbar' * x + gamma * x' * sigma * x)
+optimize!(model)
+#+end_src
